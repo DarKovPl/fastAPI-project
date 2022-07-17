@@ -51,3 +51,14 @@ class Database:
         self.optimise_data_frame()
         players = json.loads(self.players_data.to_json(orient="records"))
         return players
+
+    def get_one_player_by_name(self, player_name: str):
+        player_data = self.nba_players_collection.find_one({"player_name": player_name})
+        self.players_data = pd.DataFrame([player_data])
+
+        self.optimise_data_frame()
+        player_data = json.loads(self.players_data.to_json(orient="records"))
+        return player_data
+
+
+# Database().get_one_player_by_name("Travis Knight")

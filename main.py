@@ -33,7 +33,7 @@ class ResponseModel(BaseModel):
 
 @app.get("/players", response_model=ResponseModel, tags=["players"])
 async def all_players(page_num: int = 1, page_size: int = 10):
-    data = Database().get_data_from_mongo_database()
+    data = Database().get_data_from_csv_file()
     start = (page_num - 1) * page_size
     end = start + page_size
     total_pages = math.ceil(len(data) / page_size)
@@ -63,3 +63,9 @@ async def all_players(page_num: int = 1, page_size: int = 10):
         }
     )
     return response
+
+
+@app.get("/player/{player_name}", response_model=list[NBAPlayers], tags=["players"])
+async def get_player_by_name(player_name: str):
+
+    return Database().get_one_player_by_name(player_name)
